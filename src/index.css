@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+#root {
+  position: relative;
+  height: 100%;
+}
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+span {
+  user-select: none;
+}
+body {
+  height: 100vh;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+@keyframes upperPanelDown {
+  0% {
+    transform: translateY(0);
+    scale: 0.7;
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(105%);
+    scale: 1.05;
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100%);
+    scale: 1;
+    opacity: 1;
+  }
+}
+@keyframes lowerPanelUp {
+  0% {
+    transform: translateY(0);
+    scale: 0.7;
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-105%);
+    scale: 1.05;
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100%);
+    scale: 1;
+    opacity: 1;
+  }
+}
+.makeUpperPanelDown {
+  animation: upperPanelDown 0.3s infinite;
+  pointer-events: none;
+}
+.makeLowerPanelUp {
+  animation: lowerPanelUp 0.3s linear;
+  pointer-events: none;
+}
+@keyframes currentPanelUp {
+  0% {
+    transform: translateY(0);
+    scale: 1;
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    scale: 0.7;
+    opacity: 0.7;
+  }
+}
+@keyframes currentPanelDown {
+  0% {
+    transform: translateY(0);
+    scale: 1;
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    scale: 0.7;
+    opacity: 0.7;
+  }
+}
+.makeCurrentPanelDown {
+  animation: currentPanelDown 0.3s linear;
+  pointer-events: none;
+}
+.makeCurrentPanelUp {
+  animation: currentPanelUp 0.3s linear;
+  pointer-events: none;
+}
