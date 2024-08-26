@@ -12,6 +12,6 @@ export const monthNames = [
   "November",
   "December",
 ];
-export const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+export const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export const dateInMiliseconds = 1000 * 60 * 60 * 24;

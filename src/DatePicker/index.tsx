@@ -92,7 +92,7 @@ function DatePicker({ initalDate }: { initalDate: string }) {
 function DatePanel() {
   const { date, setDate, transitionStatus, setTransitionStatus } =
     useContext(MyContext);
-  console.log(date);
+
   const currentPanel = useRef<HTMLDivElement>(null);
   const upperPanel = useRef<HTMLDivElement>(null);
   const lowerPanel = useRef<HTMLDivElement>(null);
@@ -145,7 +145,7 @@ function DatePanel() {
 
   return (
     <div className="space-y-2 ">
-      <div className="grid grid-cols-7 bg-white rounded-lg shadow-md text-gray-600 text-center">
+      <div className="grid grid-cols-7 bg-white rounded-lg shadow-sm text-gray-600 text-center">
         {dayNames.map((dateOfWeek) => (
           <span
             className="font-bold text-gray-600 text-md py-2 "
@@ -205,14 +205,14 @@ function DateGrid({
               !setDate ? () => {} : () => setDate(d.toISOString().split("T")[0])
             }
             key={d.toISOString()}
-            className={`col-span-1 text-md text-gray-600 transition-all
+            className={`col-span-1 h-[28px] flex items-center justify-center text-sm text-gray-600 transition-all
               
              ${
                getDate(date) === d.getDate() &&
                getMonth(date) === d.getMonth() &&
                getYear(date) === d.getFullYear() &&
                !transitionStatus
-                 ? "rounded-full font-bold bg-red-300 text-gray-400"
+                 ? "rounded-full font-bold bg-red-400 text-gray-200 hover:text-white hover:opacity-85"
                  : ""
              }  ${
               !transitionStatus
@@ -253,10 +253,10 @@ function DateModal() {
             />
           </div>
           <div className="flex flex-col items-center justify-center mb-2 mt-2">
-            <h2 className="font-bold text-2xl text-gray-700 mb-1">
+            <h2 className="font-semibold text-2xl text-slate-500 mb-1">
               {getYear(date)}
             </h2>
-            <p className="text-gray-500 text-lg font-semibold">
+            <p className="text-slate-500 text-lg font-semibold">
               {getMonthName(date)}
             </p>
           </div>

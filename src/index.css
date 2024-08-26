@@ -79,11 +79,11 @@ h1 {
   }
 }
 .makeUpperPanelDown {
-  animation: upperPanelDown 0.3s infinite;
+  animation: upperPanelDown 0.3s linear forwards;
   pointer-events: none;
 }
 .makeLowerPanelUp {
-  animation: lowerPanelUp 0.3s linear;
+  animation: lowerPanelUp 0.3s linear forwards;
   pointer-events: none;
 }
 @keyframes currentPanelUp {
@@ -111,10 +111,10 @@ h1 {
   }
 }
 .makeCurrentPanelDown {
-  animation: currentPanelDown 0.3s linear;
+  animation: currentPanelDown 0.3s linear forwards;
   pointer-events: none;
 }
 .makeCurrentPanelUp {
-  animation: currentPanelUp 0.3s linear;
+  animation: currentPanelUp 0.3s linear forwards;
   pointer-events: none;
 }
