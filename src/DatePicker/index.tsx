@@ -21,8 +21,9 @@ import {
 import Button from "./Button";
 import { IoCaretBack, IoCaretForward } from "react-icons/io5";
 import { FaBackward, FaForward } from "react-icons/fa";
-import ReactDOM from "react-dom";
 import { CiCalendar } from "react-icons/ci";
+import { triggerCbOnEscapeKeyForAnElement } from "../hooks/triggerCbOnEscapeKeyForAnElement";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const MyContext = createContext({
   date: new Date().toISOString().split("T")[0],
@@ -35,56 +36,55 @@ function DatePicker({ initalDate }: { initalDate: string }) {
   const [date, setDate] = useState<string>(initalDate);
   const [transitionStatus, setTransitionStatus] = useState<boolean>(false);
   const toggle = () => setIsModalOpen(!isModalOpen);
+  const targetRef = useOutsideClick<HTMLDivElement>(() => {
+    setIsModalOpen(false);
+  }, []);
+  const divWrapper = triggerCbOnEscapeKeyForAnElement<HTMLDivElement>(() => {
+    setIsModalOpen(false);
+  }, []);
   return (
     <MyContext.Provider
       value={{ date, setDate, transitionStatus, setTransitionStatus }}
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 isolate z-50 text-center ">
-        <div className="relative">
-          <input
-            type="date"
-            value={date}
-            className="
-    border 
-    border-gray-300 
-    rounded-md 
-    px-4 
-    py-2 
-    text-gray-600 
-    bg-white 
-    focus:outline-none 
-    focus:ring-2 
-    focus:ring-blue-500 
-    focus:border-transparent
-    shadow-sm
-    hover:shadow-md
-    transition-shadow
-    duration-200
-  "
-            onClick={toggle}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              if (Number.isNaN(new Date(e.target.value).getTime())) {
-                return;
-              }
-              setDate(e.target.value);
-            }}
-          ></input>
-
-          <CiCalendar className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-        </div>
-        {isModalOpen && <DateModal />}
-
-        {isModalOpen &&
-          ReactDOM.createPortal(
-            <div
-              onClickCapture={(e) => {
-                e.stopPropagation();
-                toggle();
+      <div ref={targetRef}>
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 isolate z-50 text-center "
+          ref={divWrapper}
+        >
+          <div className="relative">
+            <input
+              type="date"
+              value={date}
+              className="
+                        border 
+                        border-gray-300 
+                        rounded-md 
+                        px-4 
+                        py-2 
+                        text-gray-600 
+                        bg-white 
+                        focus:outline-none 
+                        focus:ring-2 
+                        focus:ring-blue-500 
+                        focus:border-transparent
+                        shadow-sm
+                        hover:shadow-md
+                        transition-shadow
+                        duration-200
+                      "
+              onClick={toggle}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                if (Number.isNaN(new Date(e.target.value).getTime())) {
+                  return;
+                }
+                setDate(e.target.value);
               }}
-              className="z-[35] fixed top-0 left-0 bottom-0 right-0"
-            ></div>,
-            document.getElementById("portal-root")!
-          )}
+            ></input>
+
+            <CiCalendar className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          </div>
+          {isModalOpen && <DateModal />}
+        </div>
       </div>
     </MyContext.Provider>
   );
@@ -111,14 +111,13 @@ function DatePanel() {
     }
   }, [getMonthName(date), getYear(date)]);
   useEffect(() => {
-    console.log(newRangeOfDates.length === 0);
     if (
       newRangeOfDates.length === 0 ||
       newRangeOfDates === currentRangeOfDates
     ) {
       return;
     }
-    const transitionEndHanlder = (e: Event) => {
+    const transitionEndHanlder = () => {
       // when animation ends dismounts every things and rerender the main panel
       setCurrentRangeOfDates(newRangeOfDates);
       setNewRangeOfDates([]);
