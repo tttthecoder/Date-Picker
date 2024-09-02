@@ -1,0 +1,53 @@
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { TableContext } from "./context";
+import Header from "./header";
+import { SortableTableProps, TableRowType } from "./type";
+import TableBody from "./TableBody";
+import useTable from "../hooks/useTable";
+
+function SortableTable<T extends TableRowType>({
+  data,
+  sortBy = null,
+  sortOrder = null,
+}: SortableTableProps<T>) {
+  const {
+    rows: _rows,
+    setRows: _setRows,
+    sortOrder: _sortOrder,
+    setSortOrder: _setSortOrder,
+    sortBy: _sortBy,
+    setSortBy: _setSortBy,
+    page: _page,
+    setPage: _setPage,
+    rowsPerPage: _rowsPerPage,
+    setRowsPerPage: _setRowsPerPage,
+    swappingRows: _swappingRows,
+  } = useTable(data, sortBy, sortOrder);
+
+  return (
+    <TableContext.Provider
+      value={{
+        rows: _rows,
+        setRows: _setRows as Dispatch<SetStateAction<TableRowType[]>>,
+        sortOrder: _sortOrder,
+        setSortOrder: _setSortOrder,
+        sortBy: _sortBy,
+        setSortBy: _setSortBy as Dispatch<
+          SetStateAction<keyof TableRowType | null>
+        >,
+        page: _page,
+        setPage: _setPage,
+        rowsPerPage: _rowsPerPage,
+        setRowsPerPage: _setRowsPerPage,
+        swappingRows: _swappingRows,
+      }}
+    >
+      <table className=" block bg-white border border-gray-300 shadow-md rounded-lg ">
+        <Header />
+        <TableBody />
+      </table>
+    </TableContext.Provider>
+  );
+}
+
+export default SortableTable;
