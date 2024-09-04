@@ -1,17 +1,33 @@
 import { TableRowProps, TableRowType } from "./type";
+import { twMerge } from "tailwind-merge";
 
-function TableRow<T extends TableRowType>({ data, ...rest }: TableRowProps<T>) {
+function TableRow<T extends TableRowType>({
+  data,
+  baseClass,
+  draggedRowClass,
+  animatedClass,
+  cursorStylesClass,
+  className,
+  ...rest
+}: TableRowProps<T>) {
   return (
     <tr
       draggable
       {...rest}
-      className={"hover:bg-gray-50 transition-transform duration-[0.09s]"}
+      style={{ transition: "all 0.06s linear" }}
+      className={twMerge(
+        baseClass,
+        draggedRowClass,
+        animatedClass,
+        cursorStylesClass
+      )}
     >
       {Object.keys(data).map((key) => {
         return (
           <td
             key={key}
-            className="max-w-[300px] py-2 px-4 border-b border-gray-300 text-ellipsis text-nowrap overflow-hidden"
+            draggable={false}
+            className="max-w-[300px] py-2 px-4 text-ellipsis text-nowrap overflow-hidden"
           >
             {data[`${key}`]}
           </td>

@@ -10,6 +10,7 @@ function header() {
         {keys.map((header) => {
           return (
             <th
+              draggable={false}
               onClick={() => {
                 sortOrder === "ASC"
                   ? setSortOrder("DESC")

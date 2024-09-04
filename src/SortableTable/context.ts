@@ -14,4 +14,10 @@ export const TableContext = createContext<ContextType>({
   rowsPerPage: 5,
   setRowsPerPage: () => {},
   swappingRows: (currentIndex, targetIndex) => {},
+  currentDraggedElementIndex: null,
+  setCurrentDraggedElementIndex: () => {},
+  isSwappingAnimationOnGoing: false,
+  setIsSwappingAnimationOnGoing: () => {},
+  currentDraggedOverElementIndex: null,
+  setCurrentDraggedOverElementIndex: () => {},
 });

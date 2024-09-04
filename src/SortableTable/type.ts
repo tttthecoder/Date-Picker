@@ -16,15 +16,28 @@ export type ContextType = {
   rowsPerPage: number;
   setRowsPerPage: Dispatch<SetStateAction<number>>;
   swappingRows: (currentIndex: number, targetIndex: number) => void;
+  currentDraggedElementIndex: number | null;
+  setCurrentDraggedElementIndex: Dispatch<SetStateAction<number | null>>;
+  currentDraggedOverElementIndex: number | null;
+  setCurrentDraggedOverElementIndex: Dispatch<SetStateAction<number | null>>;
+  isSwappingAnimationOnGoing: boolean;
+  setIsSwappingAnimationOnGoing: Dispatch<SetStateAction<boolean>>;
 };
 
 export interface SortableTableProps<T extends TableRowType> {
   data: T[];
   sortBy?: Exclude<keyof T, symbol> | null;
   sortOrder?: "ASC" | "DESC" | null;
+  baseRowClass: string;
+  draggedRowClass: string;
+  // draggedRowClassTranslucent: string;
 }
 
 export interface TableRowProps<T>
   extends React.HTMLAttributes<HTMLTableRowElement> {
   data: T;
+  baseClass: string;
+  cursorStylesClass: string;
+  draggedRowClass: string;
+  animatedClass: string;
 }

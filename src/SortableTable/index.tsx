@@ -9,6 +9,8 @@ function SortableTable<T extends TableRowType>({
   data,
   sortBy = null,
   sortOrder = null,
+  baseRowClass = "",
+  draggedRowClass = "",
 }: SortableTableProps<T>) {
   const {
     rows: _rows,
@@ -23,7 +25,13 @@ function SortableTable<T extends TableRowType>({
     setRowsPerPage: _setRowsPerPage,
     swappingRows: _swappingRows,
   } = useTable(data, sortBy, sortOrder);
-
+  const [_currentDraggedElementIndex, _setCurrentDraggedElement] = useState<
+    number | null
+  >(null);
+  const [_currentDraggedOverElementIndex, _setCurrentDraggedOverElement] =
+    useState<number | null>(null);
+  const [_isSwappingAnimationOnGoing, _setIsSwappingAnimationOnGoing] =
+    useState<boolean>(false);
   return (
     <TableContext.Provider
       value={{
@@ -40,11 +48,20 @@ function SortableTable<T extends TableRowType>({
         rowsPerPage: _rowsPerPage,
         setRowsPerPage: _setRowsPerPage,
         swappingRows: _swappingRows,
+        currentDraggedElementIndex: _currentDraggedElementIndex,
+        setCurrentDraggedElementIndex: _setCurrentDraggedElement,
+        isSwappingAnimationOnGoing: _isSwappingAnimationOnGoing,
+        setIsSwappingAnimationOnGoing: _setIsSwappingAnimationOnGoing,
+        currentDraggedOverElementIndex: _currentDraggedOverElementIndex,
+        setCurrentDraggedOverElementIndex: _setCurrentDraggedOverElement,
       }}
     >
       <table className=" block bg-white border border-gray-300 shadow-md rounded-lg ">
         <Header />
-        <TableBody />
+        <TableBody
+          baseRowClass={baseRowClass}
+          draggedRowClass={draggedRowClass}
+        />
       </table>
     </TableContext.Provider>
   );
