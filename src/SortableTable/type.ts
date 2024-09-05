@@ -2,7 +2,9 @@ import { Dispatch, SetStateAction } from "react";
 
 export type Primitive = string | number | boolean | null | undefined;
 
-export type TableRowType = Record<string | number, Primitive>;
+export type TableRowType = Record<string | number, Primitive> & {
+  id: string | number;
+};
 
 export type ContextType = {
   rows: TableRowType[];
@@ -15,13 +17,15 @@ export type ContextType = {
   setPage: Dispatch<SetStateAction<number>>;
   rowsPerPage: number;
   setRowsPerPage: Dispatch<SetStateAction<number>>;
-  swappingRows: (currentIndex: number, targetIndex: number) => void;
-  currentDraggedElementIndex: number | null;
-  setCurrentDraggedElementIndex: Dispatch<SetStateAction<number | null>>;
-  currentDraggedOverElementIndex: number | null;
-  setCurrentDraggedOverElementIndex: Dispatch<SetStateAction<number | null>>;
-  isSwappingAnimationOnGoing: boolean;
-  setIsSwappingAnimationOnGoing: Dispatch<SetStateAction<boolean>>;
+  movingRowToBeAfterAnotherRow: (
+    currentID: string | number,
+    targetID: string | number
+  ) => void;
+  targetPositionIndex: number | null;
+  setTargetPositionIndex: Dispatch<SetStateAction<number | null>>;
+  draggedElementIndex: number | null;
+  setDraggedElementIndex: Dispatch<SetStateAction<number | null>>;
+  sizeable: boolean;
 };
 
 export interface SortableTableProps<T extends TableRowType> {
@@ -30,14 +34,13 @@ export interface SortableTableProps<T extends TableRowType> {
   sortOrder?: "ASC" | "DESC" | null;
   baseRowClass: string;
   draggedRowClass: string;
-  // draggedRowClassTranslucent: string;
+  sizeable?: boolean;
+  rowsPerPage: number;
 }
 
 export interface TableRowProps<T>
   extends React.HTMLAttributes<HTMLTableRowElement> {
   data: T;
-  baseClass: string;
   cursorStylesClass: string;
-  draggedRowClass: string;
-  animatedClass: string;
+  animatedStyles: Record<"transform" | "transition", string> | {};
 }

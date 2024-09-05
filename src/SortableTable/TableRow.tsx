@@ -3,9 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 function TableRow<T extends TableRowType>({
   data,
-  baseClass,
-  draggedRowClass,
-  animatedClass,
+  animatedStyles,
   cursorStylesClass,
   className,
   ...rest
@@ -14,20 +12,15 @@ function TableRow<T extends TableRowType>({
     <tr
       draggable
       {...rest}
-      style={{ transition: "all 0.06s linear" }}
-      className={twMerge(
-        baseClass,
-        draggedRowClass,
-        animatedClass,
-        cursorStylesClass
-      )}
+      style={{ ...animatedStyles }}
+      className={twMerge(className, cursorStylesClass)}
     >
       {Object.keys(data).map((key) => {
         return (
           <td
             key={key}
             draggable={false}
-            className="max-w-[300px] py-2 px-4 text-ellipsis text-nowrap overflow-hidden"
+            className="max-w-[300px] py-2 px-4 text-ellipsis text-nowrap overflow-hidden border-inherit border"
           >
             {data[`${key}`]}
           </td>

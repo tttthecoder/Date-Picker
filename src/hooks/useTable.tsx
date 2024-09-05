@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { TableRowType } from "../SortableTable/type";
+import { useEffect, useState } from "react";
 
-function useTable<T extends Record<string, any>>(
+function useTable<T extends Record<string, any> & { id: string | number }>(
   data: T[],
   sortBy: Exclude<keyof T, symbol> | null = null,
   sortOrder: "ASC" | "DESC" | null = null,
   filterBy: Exclude<keyof T, symbol> | null = null,
   filterValue: string | number | null = null,
-  page: number = 0,
+  page: number = 1,
   rowsPerPage: number = 5
 ) {
   const [_rows, _setRows] = useState<T[]>(data);
@@ -18,11 +17,20 @@ function useTable<T extends Record<string, any>>(
   const [_page, _setPage] = useState(page);
   const [_rowsPerPage, _setRowsPerPage] = useState(rowsPerPage);
 
-  function _swappingRows(currentIndex: number, targetIndex: number) {
+  function _movingRowToBeAfterAnotherRow(
+    currentRowId: number | string,
+    targetRowId: number | string
+  ) {
+    if (currentRowId === targetRowId || !currentRowId || !targetRowId) return;
+
     const newRows = [..._rows];
-    const draggedItem = newRows[currentIndex];
-    newRows.splice(currentIndex as any, 1);
-    newRows.splice(targetIndex, 0, draggedItem);
+    const currentRowIndex = newRows.findIndex((row) => row.id === currentRowId);
+    const targetRowIndex = newRows.findIndex((row) => row.id === targetRowId);
+
+    const draggedItem = newRows[currentRowIndex];
+    newRows.splice(currentRowIndex as any, 1);
+    newRows.splice(targetRowIndex, 0, draggedItem);
+
     _setRows(newRows);
   }
 
@@ -53,7 +61,7 @@ function useTable<T extends Record<string, any>>(
     setPage: _setPage,
     rowsPerPage: _rowsPerPage,
     setRowsPerPage: _setRowsPerPage,
-    swappingRows: _swappingRows,
+    movingRowToBeAfterAnotherRow: _movingRowToBeAfterAnotherRow,
   };
 }
 

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { TableContext } from "./context";
 import Header from "./header";
 import { SortableTableProps, TableRowType } from "./type";
@@ -11,6 +11,8 @@ function SortableTable<T extends TableRowType>({
   sortOrder = null,
   baseRowClass = "",
   draggedRowClass = "",
+  sizeable = false,
+  rowsPerPage = 5,
 }: SortableTableProps<T>) {
   const {
     rows: _rows,
@@ -23,13 +25,14 @@ function SortableTable<T extends TableRowType>({
     setPage: _setPage,
     rowsPerPage: _rowsPerPage,
     setRowsPerPage: _setRowsPerPage,
-    swappingRows: _swappingRows,
-  } = useTable(data, sortBy, sortOrder);
-  const [_currentDraggedElementIndex, _setCurrentDraggedElement] = useState<
+    movingRowToBeAfterAnotherRow: _movingRowToBeAfterAnotherRow,
+  } = useTable(data, sortBy, sortOrder, null, null, 1, rowsPerPage);
+  const [_targetPositionIndex, _setTargetPositionIndex] = useState<
     number | null
   >(null);
-  const [_currentDraggedOverElementIndex, _setCurrentDraggedOverElement] =
-    useState<number | null>(null);
+  const [_draggedElementIndex, _setDraggedElementIndex] = useState<
+    number | null
+  >(null);
   const [_isSwappingAnimationOnGoing, _setIsSwappingAnimationOnGoing] =
     useState<boolean>(false);
   return (
@@ -47,16 +50,15 @@ function SortableTable<T extends TableRowType>({
         setPage: _setPage,
         rowsPerPage: _rowsPerPage,
         setRowsPerPage: _setRowsPerPage,
-        swappingRows: _swappingRows,
-        currentDraggedElementIndex: _currentDraggedElementIndex,
-        setCurrentDraggedElementIndex: _setCurrentDraggedElement,
-        isSwappingAnimationOnGoing: _isSwappingAnimationOnGoing,
-        setIsSwappingAnimationOnGoing: _setIsSwappingAnimationOnGoing,
-        currentDraggedOverElementIndex: _currentDraggedOverElementIndex,
-        setCurrentDraggedOverElementIndex: _setCurrentDraggedOverElement,
+        movingRowToBeAfterAnotherRow: _movingRowToBeAfterAnotherRow,
+        draggedElementIndex: _draggedElementIndex,
+        setDraggedElementIndex: _setDraggedElementIndex,
+        targetPositionIndex: _targetPositionIndex,
+        setTargetPositionIndex: _setTargetPositionIndex,
+        sizeable: sizeable,
       }}
     >
-      <table className=" block bg-white border border-gray-300 shadow-md rounded-lg ">
+      <table className=" block bg-white border border-gray-300 shadow-md rounded-lg border-separate ">
         <Header />
         <TableBody
           baseRowClass={baseRowClass}
