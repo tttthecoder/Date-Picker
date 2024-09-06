@@ -16,6 +16,7 @@ export default function TableBody({
     setSortOrder,
     page,
     rowsPerPage,
+    // testingOnlyTotalRows,
     movingRowToBeAfterAnotherRow,
     draggedElementIndex,
     setDraggedElementIndex,
@@ -28,8 +29,12 @@ export default function TableBody({
     setTargetPositionIndex(null);
     setDraggedElementIndex(null);
     // if we don't have target, we are not moving at all, then returns. When dragged element index equals target position index, we also don't have to change the dragged element to a new position in the array!
-    if (!targetPositionIndex || draggedElementIndex === targetPositionIndex)
+    if (
+      targetPositionIndex === null ||
+      draggedElementIndex === targetPositionIndex
+    )
       return;
+
     const targetID = rows[targetPositionIndex as number].id;
     const currentID = rows[draggedElementIndex as number].id;
     movingRowToBeAfterAnotherRow(currentID, targetID);
@@ -71,7 +76,7 @@ export default function TableBody({
             transform: `translateY(-100%)`,
           };
   }
-
+  // console.log("render11111", draggedElementIndex, targetPositionIndex, rows);
   return (
     <tbody>
       {rows.map((row, index) => {
@@ -90,7 +95,7 @@ export default function TableBody({
             ? draggedElementAnimatedStyles
             : isInRange
             ? otherElementsInRangeAnimatedStyles
-            : { transform: "none", transition: "all 0.2s linear" };
+            : { transform: "none", transition: "none" };
 
           // You have to adjust to get the real position (with translation factored in) of the element because the element could be translated to a
           // different position in the array and its current translated position index might not always be its index
@@ -103,9 +108,14 @@ export default function TableBody({
             : index;
         } else {
           animatedStylesObj = { transform: "none", transition: "none" };
+          // animatedStylesObj = {
+          //   transform: "none",
+          //   transition: "all 2s linear",
+          // };
           cursorStylesClass = "cursor-grab";
           myPositionIndexWithTranslationFactoredIn = index;
         }
+        // console.log(row.id!.toString());
         return (
           <TableRow
             className={
@@ -146,6 +156,18 @@ export default function TableBody({
           />
         );
       })}
+      {/* <div className="border-b border-gray-400">divider testing only</div>
+      {testingOnlyTotalRows.map((row, index) => {
+        return (
+          <TableRow
+            className={""}
+            cursorStylesClass={""}
+            animatedStyles={""}
+            key={row.id!.toString()}
+            data={row}
+          />
+        );
+      })} */}
     </tbody>
   );
 }

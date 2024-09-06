@@ -16,7 +16,11 @@ function SortableTable<T extends TableRowType>({
 }: SortableTableProps<T>) {
   const {
     rows: _rows,
-    setRows: _setRows,
+    filterBy: _filterBy,
+    setFilterBy: _setFilterBy,
+    // testingOnlyTotalRows: testingOnlyTotalRows,
+    filterByValue: _filterValue,
+    setFilterByValue: _setFilterByValue,
     sortOrder: _sortOrder,
     setSortOrder: _setSortOrder,
     sortBy: _sortBy,
@@ -33,13 +37,13 @@ function SortableTable<T extends TableRowType>({
   const [_draggedElementIndex, _setDraggedElementIndex] = useState<
     number | null
   >(null);
-  const [_isSwappingAnimationOnGoing, _setIsSwappingAnimationOnGoing] =
-    useState<boolean>(false);
+
   return (
     <TableContext.Provider
       value={{
         rows: _rows,
-        setRows: _setRows as Dispatch<SetStateAction<TableRowType[]>>,
+        // testingOnlyTotalRows: testingOnlyTotalRows,
+        // setRows: _setRows as Dispatch<SetStateAction<TableRowType[]>>,
         sortOrder: _sortOrder,
         setSortOrder: _setSortOrder,
         sortBy: _sortBy,

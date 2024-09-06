@@ -8,15 +8,16 @@ export type TableRowType = Record<string | number, Primitive> & {
 
 export type ContextType = {
   rows: TableRowType[];
-  setRows: Dispatch<SetStateAction<TableRowType[]>>;
+  // testingOnlyTotalRows: any[];
+  // setRows: Dispatch<SetStateAction<TableRowType[]>>;
   sortBy: keyof TableRowType | null;
   setSortBy: Dispatch<SetStateAction<string | number | null>>;
   sortOrder: "ASC" | "DESC" | null;
   setSortOrder: Dispatch<SetStateAction<"ASC" | "DESC" | null>>;
-  page: number;
-  setPage: Dispatch<SetStateAction<number>>;
-  rowsPerPage: number;
-  setRowsPerPage: Dispatch<SetStateAction<number>>;
+  page: number | null;
+  setPage: Dispatch<SetStateAction<number | null>>;
+  rowsPerPage: number | null;
+  setRowsPerPage: Dispatch<SetStateAction<number | null>>;
   movingRowToBeAfterAnotherRow: (
     currentID: string | number,
     targetID: string | number

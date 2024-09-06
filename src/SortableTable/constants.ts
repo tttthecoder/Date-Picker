@@ -10,4 +10,22 @@ export const data = [
     age: 40,
     city: "Houston",
   },
+  {
+    id: 7,
+    name: "Tim Josh",
+    age: 41,
+    city: "HCM City",
+  },
+  {
+    id: 8,
+    name: "Davis Cooper",
+    age: 23,
+    city: "Texas",
+  },
+  {
+    id: 9,
+    name: "Davis Cooper Junior",
+    age: 23,
+    city: "New York",
+  },
 ];

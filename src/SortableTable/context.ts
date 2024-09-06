@@ -4,7 +4,8 @@ import { data } from "./constants";
 import { ContextType } from "./type";
 export const TableContext = createContext<ContextType>({
   rows: data,
-  setRows: () => {},
+  // setRows: () => {},
+  // testingOnlyTotalRows: [],
   sortBy: null,
   sortOrder: null,
   setSortBy: () => {},
