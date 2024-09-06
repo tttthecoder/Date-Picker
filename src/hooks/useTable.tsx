@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 function useTable<T extends Record<string, any> & { id: string | number }>(
   data: T[],
@@ -11,8 +11,6 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
 ) {
   // _rows here is for internal data usage only and is the single source of truth for all the records we ever have!
   const [_rows, _setRows] = useState<T[]>(data);
-  // _exposedRows here is for the output of the hooks. its to be returned to other code!
-  const [_exposedRows, _setExposedRows] = useState<T[]>([...data]);
   const [_sortOrder, _setSortOrder] = useState(sortOrder);
   const [_sortBy, _setSortBy] = useState<Exclude<keyof T, symbol> | null>(
     sortBy
@@ -25,7 +23,7 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
   );
   const [_page, _setPage] = useState<number | null>(page);
   const [_rowsPerPage, _setRowsPerPage] = useState<number | null>(rowsPerPage);
-
+  // ================ this function will expose the action of moving a row to be after another row in our _rows =========================
   function _movingRowToBeAfterAnotherRow(
     currentRowId: number | string,
     targetRowId: number | string
@@ -43,11 +41,10 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
     _setRows(newRows);
   }
 
-  // effect for sorting on the entire _rows
+  // ========================== effect for sorting on the entire _rows =============================================
   useEffect(() => {
     // guard against first mount and when dragging!
     if ((!_sortOrder && !_sortBy) || _rows.length < 2) return;
-    console.log("sort");
     const sortedRows = _rows.sort((a, b) => {
       let first = a[`${_sortBy}`];
       let second = b[`${_sortBy}`];
@@ -60,8 +57,8 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
     _setRows([...sortedRows]);
   }, [_sortBy, _sortOrder]);
 
-  // effect for re-computing the entire _exposedRows
-  useEffect(() => {
+  // ======= compute the to be exposed rows that factors in the pagination and filter configuration ==================
+  var rowsWithPaginationAndFilterApplied = useMemo(() => {
     var tobeExposedRows: T[] = [..._rows];
     if (filterBy !== null && filterValue !== null) {
       tobeExposedRows = tobeExposedRows.filter(
@@ -74,12 +71,13 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
         return index >= (page - 1) * rowsPerPage && index < page * rowsPerPage;
       });
     }
-    _setExposedRows(tobeExposedRows);
+
+    return tobeExposedRows;
   }, [page, rowsPerPage, filterBy, filterValue, _rows]);
 
   return {
     // testingOnlyTotalRows: _rows,
-    rows: _exposedRows,
+    rows: rowsWithPaginationAndFilterApplied,
     sortOrder: _sortOrder,
     setSortOrder: _setSortOrder,
     sortBy: _sortBy,
