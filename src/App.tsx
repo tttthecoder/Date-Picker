@@ -11,11 +11,9 @@ function App() {
           age: number;
           city: string;
         }>
-          baseRowClass={
-            "bg-white border-b border-gray-300 hover:bg-gray-100"
-          }
-          sortBy={"id"}
-          sortOrder={"ASC"}
+          baseRowClass={"bg-white border-b border-gray-300 hover:bg-gray-100"}
+          sortBy={"name"}
+          sortOrder={"DESC"}
           sizeable
           draggedRowClass={"opacity-10"}
           data={data}

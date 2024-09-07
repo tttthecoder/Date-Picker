@@ -1,15 +1,13 @@
 import { createContext } from "react";
 
 import { data } from "./constants";
-import { ContextType } from "./type";
-export const TableContext = createContext<ContextType>({
+import { ContextType, TableRowType } from "./type";
+export const TableContext = createContext<ContextType<TableRowType>>({
   rows: data,
-  // setRows: () => {},
   // testingOnlyTotalRows: [],
   sortBy: null,
+  sort: () => {},
   sortOrder: null,
-  setSortBy: () => {},
-  setSortOrder: () => {},
   page: 1,
   setPage: () => {},
   rowsPerPage: 5,

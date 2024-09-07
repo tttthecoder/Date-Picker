@@ -1,4 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+
+function _sortFunctionGenerator<
+  T extends Record<string, any> & { id: string | number }
+>(
+  sortBy: Exclude<keyof T, symbol> | null = null,
+  sortOrder: "ASC" | "DESC" | null = null
+) {
+  return (a: T, b: T) => {
+    let first = a[`${sortBy}`];
+    let second = b[`${sortBy}`];
+    if (sortOrder === "ASC") {
+      return first! > second! ? 1 : -1;
+    } else {
+      return first! < second! ? 1 : -1;
+    }
+  };
+}
 
 function useTable<T extends Record<string, any> & { id: string | number }>(
   data: T[],
@@ -9,8 +26,16 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
   page: number | null = null,
   rowsPerPage: number | null = null
 ) {
+  // ================ this function will compute the initial sorted data only once for the initial value of the useState hook(of the _rows) ========================
+  const _initialSortedRowsFor1stRender = useMemo(() => {
+    // console.log("inside memo");
+    if (sortBy === null || sortOrder === null) return data;
+    return data.sort(_sortFunctionGenerator(sortBy, sortOrder));
+  }, []);
+
+  // ========================================= hooks below ======================================================================================
   // _rows here is for internal data usage only and is the single source of truth for all the records we ever have!
-  const [_rows, _setRows] = useState<T[]>(data);
+  const [_rows, _setRows] = useState<T[]>(_initialSortedRowsFor1stRender);
   const [_sortOrder, _setSortOrder] = useState(sortOrder);
   const [_sortBy, _setSortBy] = useState<Exclude<keyof T, symbol> | null>(
     sortBy
@@ -23,6 +48,24 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
   );
   const [_page, _setPage] = useState<number | null>(page);
   const [_rowsPerPage, _setRowsPerPage] = useState<number | null>(rowsPerPage);
+
+  // ================ this function will expose the action of sorting on our _rows ========================================
+  function _sort(sortBy: Exclude<keyof T, symbol>, sortOrder: "ASC" | "DESC") {
+    if (sortBy === null || sortOrder === null) return;
+    try {
+      var tobeExposedRows: T[] = [..._rows];
+      tobeExposedRows = tobeExposedRows.sort(
+        _sortFunctionGenerator(sortBy, sortOrder)
+      );
+
+      _setRows(tobeExposedRows);
+      _setSortBy(sortBy);
+      _setSortOrder(sortOrder);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // ================ this function will expose the action of moving a row to be after another row in our _rows =========================
   function _movingRowToBeAfterAnotherRow(
     currentRowId: number | string,
@@ -38,26 +81,12 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
     newRows.splice(currentRowIndex as any, 1);
     newRows.splice(targetRowIndex, 0, draggedItem);
 
+    _setSortBy(null);
+    _setSortOrder(null);
     _setRows(newRows);
   }
 
-  // ========================== effect for sorting on the entire _rows =============================================
-  useEffect(() => {
-    // guard against first mount and when dragging!
-    if ((!_sortOrder && !_sortBy) || _rows.length < 2) return;
-    const sortedRows = _rows.sort((a, b) => {
-      let first = a[`${_sortBy}`];
-      let second = b[`${_sortBy}`];
-      if (_sortOrder === "ASC") {
-        return first! > second! ? 1 : -1;
-      } else {
-        return first! < second! ? 1 : -1;
-      }
-    });
-    _setRows([...sortedRows]);
-  }, [_sortBy, _sortOrder]);
-
-  // ======= compute the to be exposed rows that factors in the pagination and filter configuration ==================
+  // ======= compute the to be exposed rows that factors in the pagination and filter configuration ======================
   var rowsWithPaginationAndFilterApplied = useMemo(() => {
     var tobeExposedRows: T[] = [..._rows];
     if (filterBy !== null && filterValue !== null) {
@@ -79,9 +108,7 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
     // testingOnlyTotalRows: _rows,
     rows: rowsWithPaginationAndFilterApplied,
     sortOrder: _sortOrder,
-    setSortOrder: _setSortOrder,
     sortBy: _sortBy,
-    setSortBy: _setSortBy,
     filterBy: _filterBy,
     setFilterBy: _setFilterBy,
     filterByValue: _filterByValue,
@@ -91,6 +118,7 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
     rowsPerPage: _rowsPerPage,
     setRowsPerPage: _setRowsPerPage,
     movingRowToBeAfterAnotherRow: _movingRowToBeAfterAnotherRow,
+    sort: _sort,
   };
 }
 

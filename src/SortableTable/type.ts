@@ -6,14 +6,12 @@ export type TableRowType = Record<string | number, Primitive> & {
   id: string | number;
 };
 
-export type ContextType = {
-  rows: TableRowType[];
+export type ContextType<T extends TableRowType> = {
+  rows: T[];
   // testingOnlyTotalRows: any[];
-  // setRows: Dispatch<SetStateAction<TableRowType[]>>;
-  sortBy: keyof TableRowType | null;
-  setSortBy: Dispatch<SetStateAction<string | number | null>>;
+  sortBy: Exclude<keyof T, symbol> | null;
   sortOrder: "ASC" | "DESC" | null;
-  setSortOrder: Dispatch<SetStateAction<"ASC" | "DESC" | null>>;
+  sort: (sortBy: Exclude<keyof T, symbol>, sortOrder: "ASC" | "DESC") => void;
   page: number | null;
   setPage: Dispatch<SetStateAction<number | null>>;
   rowsPerPage: number | null;

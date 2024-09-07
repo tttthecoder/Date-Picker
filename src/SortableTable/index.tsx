@@ -22,15 +22,14 @@ function SortableTable<T extends TableRowType>({
     filterByValue: _filterValue,
     setFilterByValue: _setFilterByValue,
     sortOrder: _sortOrder,
-    setSortOrder: _setSortOrder,
     sortBy: _sortBy,
-    setSortBy: _setSortBy,
     page: _page,
     setPage: _setPage,
     rowsPerPage: _rowsPerPage,
     setRowsPerPage: _setRowsPerPage,
     movingRowToBeAfterAnotherRow: _movingRowToBeAfterAnotherRow,
-  } = useTable(data, sortBy, sortOrder, null, null, 1, rowsPerPage);
+    sort: _sort,
+  } = useTable<T>(data, sortBy, sortOrder, null, null, 1, rowsPerPage);
   const [_targetPositionIndex, _setTargetPositionIndex] = useState<
     number | null
   >(null);
@@ -45,11 +44,11 @@ function SortableTable<T extends TableRowType>({
         // testingOnlyTotalRows: testingOnlyTotalRows,
         // setRows: _setRows as Dispatch<SetStateAction<TableRowType[]>>,
         sortOrder: _sortOrder,
-        setSortOrder: _setSortOrder,
+        // setSortOrder: _setSortOrder,
         sortBy: _sortBy,
-        setSortBy: _setSortBy as Dispatch<
-          SetStateAction<keyof TableRowType | null>
-        >,
+        // setSortBy: _setSortBy as Dispatch<
+        //   SetStateAction<keyof TableRowType | null>
+        // >,
         page: _page,
         setPage: _setPage,
         rowsPerPage: _rowsPerPage,
@@ -60,6 +59,10 @@ function SortableTable<T extends TableRowType>({
         targetPositionIndex: _targetPositionIndex,
         setTargetPositionIndex: _setTargetPositionIndex,
         sizeable: sizeable,
+        sort: _sort as (
+          sortBy: string | number,
+          sortOrder: "ASC" | "DESC"
+        ) => void,
       }}
     >
       <table className=" block bg-white border border-gray-300 shadow-md rounded-lg border-separate ">

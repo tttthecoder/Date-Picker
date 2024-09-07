@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { TableContext } from "./context";
 
 function header() {
-  const { rows, setSortBy, setSortOrder, sortOrder } = useContext(TableContext);
+  const { rows, sortBy, sortOrder, sort } = useContext(TableContext);
   const keys = Object.keys(rows[0]);
   return (
     <thead>
@@ -13,9 +13,8 @@ function header() {
               draggable={false}
               onClick={() => {
                 sortOrder === "ASC"
-                  ? setSortOrder("DESC")
-                  : setSortOrder("ASC");
-                setSortBy(header);
+                  ? sort(header, "DESC")
+                  : sort(header, "ASC");
               }}
               key={header}
               className="py-2 px-4 border-b border-gray-300 text-left cursor-pointer"

@@ -12,8 +12,8 @@ export default function TableBody({
 }) {
   const {
     rows,
-    setSortBy,
-    setSortOrder,
+    sortBy,
+    sortOrder,
     page,
     rowsPerPage,
     // testingOnlyTotalRows,
@@ -40,8 +40,6 @@ export default function TableBody({
     movingRowToBeAfterAnotherRow(currentID, targetID);
   };
   const handleDragStart = (e: DragEvent, index: any) => {
-    setSortBy(null);
-    setSortOrder(null);
     setDraggedElementIndex(index);
     e.dataTransfer.effectAllowed = "move";
   };
