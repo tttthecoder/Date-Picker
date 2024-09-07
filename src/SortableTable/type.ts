@@ -1,16 +1,23 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type Primitive = string | number | boolean | null | undefined;
+export type Primitive = string | number | boolean | null;
 
 export type TableRowType = Record<string | number, Primitive> & {
   id: string | number;
 };
 
 export type ContextType<T extends TableRowType> = {
-  rows: T[];
+  rowsWithSortPaginationAndFilterApplied: T[];
+  totalNumOfRowsWithSortAndFilterApplied: number;
   testingOnlyTotalRows: any[];
   sortBy: Extract<keyof T, string | number> | null;
   sortOrder: "ASC" | "DESC" | null;
+  filterBy: Extract<keyof T, string | number> | null;
+  setFilterBy: Dispatch<
+    SetStateAction<Extract<keyof T, string | number> | null>
+  >;
+  filterByValue: Primitive;
+  setFilterByValue: Dispatch<SetStateAction<Primitive>>;
   sort: (sortBy: Extract<keyof T, string>, sortOrder: "ASC" | "DESC") => void;
   page: number | null;
   setPage: Dispatch<SetStateAction<number | null>>;
@@ -25,7 +32,8 @@ export type ContextType<T extends TableRowType> = {
   draggedElementIndex: number | null;
   setDraggedElementIndex: Dispatch<SetStateAction<number | null>>;
   sizeable: boolean;
-  totalRows: number;
+  totalNumOfRowsWithNothingApplied: number;
+  columnNames: (keyof T)[];
 };
 
 export interface SortableTableProps<T extends TableRowType> {

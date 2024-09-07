@@ -1,13 +1,16 @@
 import { createContext } from "react";
-
-import { data } from "./constants";
 import { ContextType, TableRowType } from "./type";
+
 export const TableContext = createContext<ContextType<TableRowType>>({
-  rows: data,
+  rowsWithSortPaginationAndFilterApplied: [],
   testingOnlyTotalRows: [],
   sortBy: null,
   sort: () => {},
   sortOrder: null,
+  filterBy: null,
+  setFilterBy: () => {},
+  filterByValue: null,
+  setFilterByValue: () => {},
   page: 1,
   setPage: () => {},
   rowsPerPage: 5,
@@ -18,5 +21,7 @@ export const TableContext = createContext<ContextType<TableRowType>>({
   draggedElementIndex: null,
   setDraggedElementIndex: () => {},
   sizeable: false,
-  totalRows: 0,
+  totalNumOfRowsWithNothingApplied: 0,
+  totalNumOfRowsWithSortAndFilterApplied: 0,
+  columnNames: [],
 });

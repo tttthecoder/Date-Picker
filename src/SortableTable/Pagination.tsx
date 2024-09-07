@@ -2,10 +2,13 @@ import React, { useContext } from "react";
 import { TableContext } from "./context";
 
 const Pagination: React.FC = () => {
-  const { page, rowsPerPage, setPage, totalRows } = useContext(TableContext);
+  const { page, rowsPerPage, setPage, totalNumOfRowsWithSortAndFilterApplied } =
+    useContext(TableContext);
 
   // Calculate total pages
-  const totalPages = rowsPerPage && Math.ceil(totalRows / rowsPerPage);
+  const totalPages =
+    rowsPerPage &&
+    Math.ceil(totalNumOfRowsWithSortAndFilterApplied / rowsPerPage);
 
   // Handlers for page navigation
   const handlePrevious = () => {
@@ -43,7 +46,9 @@ const Pagination: React.FC = () => {
           </button>
         </>
       ) : (
-        <span className="text-gray-700">Total Records: {totalRows}</span>
+        <span className="text-gray-700">
+          Total Records: {totalNumOfRowsWithSortAndFilterApplied}
+        </span>
       )}
     </div>
   );

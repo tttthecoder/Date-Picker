@@ -5,7 +5,7 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
   data: T[],
   sortBy: Extract<keyof T, string | number> | null = null,
   sortOrder: "ASC" | "DESC" | null = null,
-  filterBy: Exclude<keyof T, symbol> | null = null,
+  filterBy: Extract<keyof T, string | number> | null = null,
   filterValue: string | number | null = null,
   page: number | null = null,
   rowsPerPage: number | null = null
@@ -25,12 +25,13 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
     keyof T,
     string | number
   > | null>(sortBy);
-  const [_filterBy, _setFilterBy] = useState<Exclude<keyof T, symbol> | null>(
-    filterBy
-  );
-  const [_filterByValue, _setFilterByValue] = useState<string | number | null>(
-    filterValue
-  );
+  const [_filterBy, _setFilterBy] = useState<Extract<
+    keyof T,
+    string | number
+  > | null>(filterBy);
+  const [_filterByValue, _setFilterByValue] = useState<
+    string | number | null | boolean
+  >(filterValue);
   const [_page, _setPage] = useState<number | null>(page);
   const [_rowsPerPage, _setRowsPerPage] = useState<number | null>(rowsPerPage);
 
@@ -72,28 +73,49 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
   }
 
   // ======= compute the to be exposed rows that factors in the pagination and filter configuration ======================
-  var rowsWithPaginationAndFilterApplied = useMemo(() => {
-    var tobeExposedRows: T[] = [..._rows];
-    if (filterBy !== null && filterValue !== null) {
-      tobeExposedRows = tobeExposedRows.filter(
+  const {
+    rowsWithPaginationSortAndFilterApplied:
+      _rowsWithSortPaginationAndFilterApplied,
+    totalNumOfRowsWithSortAndFilterApplied:
+      _totalNumOfRowsWithSortAndFilterApplied,
+  } = useMemo(() => {
+    var accumulatingRows: T[] = [..._rows];
+    if (_filterBy !== null && _filterByValue !== null) {
+      accumulatingRows = accumulatingRows.filter(
         // to be improved later
-        (row) => row[`${filterBy}`] === row[`${filterValue}`]
+        (row) =>
+          row[`${_filterBy}`]
+            .toLowerCase()
+            .includes(`${_filterByValue}`.toLowerCase())
       );
     }
+    const totalNumOfRowsWithSortAndFilterApplied = accumulatingRows.length;
     if (_page !== null && _rowsPerPage !== null) {
-      tobeExposedRows = tobeExposedRows.filter((row, index) => {
+      accumulatingRows = accumulatingRows.filter((row, index) => {
         return (
           index >= (_page - 1) * _rowsPerPage && index < _page * _rowsPerPage
         );
       });
     }
 
-    return tobeExposedRows;
+    return {
+      rowsWithPaginationSortAndFilterApplied: accumulatingRows,
+      totalNumOfRowsWithSortAndFilterApplied:
+        totalNumOfRowsWithSortAndFilterApplied,
+    };
   }, [_page, _rowsPerPage, _filterBy, _filterByValue, _rows]);
 
+  // ====================== compute the columns' names ==========================================
+  const _columnNames = Object.keys(_rows[0]);
+
+  console.log(_filterBy, _filterByValue, "inhook");
   return {
     testingOnlyTotalRows: _rows,
-    rows: rowsWithPaginationAndFilterApplied,
+    rowsWithSortPaginationAndFilterApplied:
+      _rowsWithSortPaginationAndFilterApplied,
+    totalNumOfRowsWithSortAndFilterApplied:
+      _totalNumOfRowsWithSortAndFilterApplied,
+    totalNumOfRowsWithNothingApplied: _rows.length,
     sortOrder: _sortOrder,
     sortBy: _sortBy,
     filterBy: _filterBy,
@@ -106,7 +128,7 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
     setRowsPerPage: _setRowsPerPage,
     movingRowToBeAfterAnotherRow: _movingRowToBeAfterAnotherRow,
     sort: _sort,
-    totalRows: _rows.length,
+    columnNames: _columnNames,
   };
 }
 

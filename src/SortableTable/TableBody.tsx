@@ -11,11 +11,7 @@ export default function TableBody({
   draggedRowClass: string;
 }) {
   const {
-    rows,
-    sortBy,
-    sortOrder,
-    page,
-    rowsPerPage,
+    rowsWithSortPaginationAndFilterApplied,
     testingOnlyTotalRows,
     movingRowToBeAfterAnotherRow,
     draggedElementIndex,
@@ -35,8 +31,10 @@ export default function TableBody({
     )
       return;
 
-    const targetID = rows[targetPositionIndex as number].id;
-    const currentID = rows[draggedElementIndex as number].id;
+    const targetID =
+      rowsWithSortPaginationAndFilterApplied[targetPositionIndex as number].id;
+    const currentID =
+      rowsWithSortPaginationAndFilterApplied[draggedElementIndex as number].id;
     movingRowToBeAfterAnotherRow(currentID, targetID);
   };
   const handleDragStart = (e: DragEvent, index: any) => {
@@ -77,7 +75,7 @@ export default function TableBody({
   // console.log("render11111", draggedElementIndex, targetPositionIndex, rows);
   return (
     <tbody>
-      {rows.map((row, index) => {
+      {rowsWithSortPaginationAndFilterApplied.map((row, index) => {
         var animatedStylesObj: Record<string, any>;
         var cursorStylesClass: string;
         var myPositionIndexWithTranslationFactoredIn: number;
