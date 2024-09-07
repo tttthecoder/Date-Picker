@@ -108,7 +108,7 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
   // ====================== compute the columns' names ==========================================
   const _columnNames = Object.keys(_rows[0]);
 
-  console.log(_filterBy, _filterByValue, "inhook");
+  // console.log(_filterBy, _filterByValue, "inhook");
   return {
     testingOnlyTotalRows: _rows,
     rowsWithSortPaginationAndFilterApplied:

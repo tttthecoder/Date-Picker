@@ -72,7 +72,7 @@ export default function TableBody({
             transform: `translateY(-100%)`,
           };
   }
-  // console.log("render11111", draggedElementIndex, targetPositionIndex, rows);
+  console.log("table body", draggedElementIndex, targetPositionIndex);
   return (
     <tbody>
       {rowsWithSortPaginationAndFilterApplied.map((row, index) => {
@@ -91,7 +91,7 @@ export default function TableBody({
             ? draggedElementAnimatedStyles
             : isInRange
             ? otherElementsInRangeAnimatedStyles
-            : { transform: "none", transition: "none" };
+            : { transform: "none", transition: "all 0.2s linear" };
 
           // You have to adjust to get the real position (with translation factored in) of the element because the element could be translated to a
           // different position in the array and its current translated position index might not always be its index
@@ -104,14 +104,9 @@ export default function TableBody({
             : index;
         } else {
           animatedStylesObj = { transform: "none", transition: "none" };
-          // animatedStylesObj = {
-          //   transform: "none",
-          //   transition: "all 2s linear",
-          // };
           cursorStylesClass = "cursor-grab";
           myPositionIndexWithTranslationFactoredIn = index;
         }
-        // console.log(row.id!.toString());
         return (
           <TableRow
             className={
@@ -152,7 +147,7 @@ export default function TableBody({
           />
         );
       })}
-      <div className="border-b border-gray-400">divider testing only</div>
+      {/* <div className="border-b border-gray-400">divider testing only</div>
       {testingOnlyTotalRows.map((row, index) => {
         return (
           <TableRow
@@ -163,7 +158,7 @@ export default function TableBody({
             data={row}
           />
         );
-      })}
+      })} */}
     </tbody>
   );
 }
