@@ -1,7 +1,7 @@
 import { DragEvent, useContext } from "react";
 import { TableContext } from "./context";
 import TableRow from "./TableRow";
-import { isInRangeFromDraggedElementToTargetPosition } from "./utils";
+import { isInRangeFromDraggedElementToTargetPosition } from "./utils/isInRangeFromDraggedElementToTargetPosition";
 
 export default function TableBody({
   baseRowClass,
@@ -16,7 +16,7 @@ export default function TableBody({
     sortOrder,
     page,
     rowsPerPage,
-    // testingOnlyTotalRows,
+    testingOnlyTotalRows,
     movingRowToBeAfterAnotherRow,
     draggedElementIndex,
     setDraggedElementIndex,
@@ -154,7 +154,7 @@ export default function TableBody({
           />
         );
       })}
-      {/* <div className="border-b border-gray-400">divider testing only</div>
+      <div className="border-b border-gray-400">divider testing only</div>
       {testingOnlyTotalRows.map((row, index) => {
         return (
           <TableRow
@@ -165,7 +165,7 @@ export default function TableBody({
             data={row}
           />
         );
-      })} */}
+      })}
     </tbody>
   );
 }

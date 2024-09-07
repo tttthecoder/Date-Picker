@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { TableContext } from "./context";
-import Header from "./header";
 import { SortableTableProps, TableRowType } from "./type";
 import TableBody from "./TableBody";
 import useTable from "../hooks/useTable";
+import Pagination from "./Pagination";
+import Header from "./header";
 
 function SortableTable<T extends TableRowType>({
   data,
@@ -18,7 +19,7 @@ function SortableTable<T extends TableRowType>({
     rows: _rows,
     filterBy: _filterBy,
     setFilterBy: _setFilterBy,
-    // testingOnlyTotalRows: testingOnlyTotalRows,
+    testingOnlyTotalRows: testingOnlyTotalRows,
     filterByValue: _filterValue,
     setFilterByValue: _setFilterByValue,
     sortOrder: _sortOrder,
@@ -29,6 +30,7 @@ function SortableTable<T extends TableRowType>({
     setRowsPerPage: _setRowsPerPage,
     movingRowToBeAfterAnotherRow: _movingRowToBeAfterAnotherRow,
     sort: _sort,
+    totalRows: _totalRows,
   } = useTable<T>(data, sortBy, sortOrder, null, null, 1, rowsPerPage);
   const [_targetPositionIndex, _setTargetPositionIndex] = useState<
     number | null
@@ -41,14 +43,9 @@ function SortableTable<T extends TableRowType>({
     <TableContext.Provider
       value={{
         rows: _rows,
-        // testingOnlyTotalRows: testingOnlyTotalRows,
-        // setRows: _setRows as Dispatch<SetStateAction<TableRowType[]>>,
+        testingOnlyTotalRows: testingOnlyTotalRows,
         sortOrder: _sortOrder,
-        // setSortOrder: _setSortOrder,
         sortBy: _sortBy,
-        // setSortBy: _setSortBy as Dispatch<
-        //   SetStateAction<keyof TableRowType | null>
-        // >,
         page: _page,
         setPage: _setPage,
         rowsPerPage: _rowsPerPage,
@@ -59,10 +56,8 @@ function SortableTable<T extends TableRowType>({
         targetPositionIndex: _targetPositionIndex,
         setTargetPositionIndex: _setTargetPositionIndex,
         sizeable: sizeable,
-        sort: _sort as (
-          sortBy: string | number,
-          sortOrder: "ASC" | "DESC"
-        ) => void,
+        sort: _sort as (sortBy: string, sortOrder: "ASC" | "DESC") => void,
+        totalRows: _totalRows,
       }}
     >
       <table className=" block bg-white border border-gray-300 shadow-md rounded-lg border-separate ">
@@ -72,6 +67,7 @@ function SortableTable<T extends TableRowType>({
           draggedRowClass={draggedRowClass}
         />
       </table>
+      <Pagination />
     </TableContext.Provider>
   );
 }

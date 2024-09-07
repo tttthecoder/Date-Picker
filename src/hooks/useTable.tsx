@@ -1,25 +1,9 @@
 import { useMemo, useState } from "react";
-
-function _sortFunctionGenerator<
-  T extends Record<string, any> & { id: string | number }
->(
-  sortBy: Exclude<keyof T, symbol> | null = null,
-  sortOrder: "ASC" | "DESC" | null = null
-) {
-  return (a: T, b: T) => {
-    let first = a[`${sortBy}`];
-    let second = b[`${sortBy}`];
-    if (sortOrder === "ASC") {
-      return first! > second! ? 1 : -1;
-    } else {
-      return first! < second! ? 1 : -1;
-    }
-  };
-}
+import { sortWithOutMutation } from "../SortableTable/utils/sortWithOutMutation";
 
 function useTable<T extends Record<string, any> & { id: string | number }>(
   data: T[],
-  sortBy: Exclude<keyof T, symbol> | null = null,
+  sortBy: Extract<keyof T, string | number> | null = null,
   sortOrder: "ASC" | "DESC" | null = null,
   filterBy: Exclude<keyof T, symbol> | null = null,
   filterValue: string | number | null = null,
@@ -30,16 +14,17 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
   const _initialSortedRowsFor1stRender = useMemo(() => {
     // console.log("inside memo");
     if (sortBy === null || sortOrder === null) return data;
-    return data.sort(_sortFunctionGenerator(sortBy, sortOrder));
+    return sortWithOutMutation(data, sortBy, sortOrder);
   }, []);
 
   // ========================================= hooks below ======================================================================================
   // _rows here is for internal data usage only and is the single source of truth for all the records we ever have!
   const [_rows, _setRows] = useState<T[]>(_initialSortedRowsFor1stRender);
   const [_sortOrder, _setSortOrder] = useState(sortOrder);
-  const [_sortBy, _setSortBy] = useState<Exclude<keyof T, symbol> | null>(
-    sortBy
-  );
+  const [_sortBy, _setSortBy] = useState<Extract<
+    keyof T,
+    string | number
+  > | null>(sortBy);
   const [_filterBy, _setFilterBy] = useState<Exclude<keyof T, symbol> | null>(
     filterBy
   );
@@ -50,13 +35,13 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
   const [_rowsPerPage, _setRowsPerPage] = useState<number | null>(rowsPerPage);
 
   // ================ this function will expose the action of sorting on our _rows ========================================
-  function _sort(sortBy: Exclude<keyof T, symbol>, sortOrder: "ASC" | "DESC") {
+  function _sort(
+    sortBy: Extract<keyof T, string | number>,
+    sortOrder: "ASC" | "DESC"
+  ) {
     if (sortBy === null || sortOrder === null) return;
     try {
-      var tobeExposedRows: T[] = [..._rows];
-      tobeExposedRows = tobeExposedRows.sort(
-        _sortFunctionGenerator(sortBy, sortOrder)
-      );
+      var tobeExposedRows = sortWithOutMutation(_rows, sortBy, sortOrder);
 
       _setRows(tobeExposedRows);
       _setSortBy(sortBy);
@@ -95,17 +80,19 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
         (row) => row[`${filterBy}`] === row[`${filterValue}`]
       );
     }
-    if (page !== null && rowsPerPage !== null) {
+    if (_page !== null && _rowsPerPage !== null) {
       tobeExposedRows = tobeExposedRows.filter((row, index) => {
-        return index >= (page - 1) * rowsPerPage && index < page * rowsPerPage;
+        return (
+          index >= (_page - 1) * _rowsPerPage && index < _page * _rowsPerPage
+        );
       });
     }
 
     return tobeExposedRows;
-  }, [page, rowsPerPage, filterBy, filterValue, _rows]);
+  }, [_page, _rowsPerPage, _filterBy, _filterByValue, _rows]);
 
   return {
-    // testingOnlyTotalRows: _rows,
+    testingOnlyTotalRows: _rows,
     rows: rowsWithPaginationAndFilterApplied,
     sortOrder: _sortOrder,
     sortBy: _sortBy,
@@ -119,6 +106,7 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
     setRowsPerPage: _setRowsPerPage,
     movingRowToBeAfterAnotherRow: _movingRowToBeAfterAnotherRow,
     sort: _sort,
+    totalRows: _rows.length,
   };
 }
 

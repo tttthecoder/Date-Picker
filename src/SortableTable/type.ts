@@ -8,10 +8,10 @@ export type TableRowType = Record<string | number, Primitive> & {
 
 export type ContextType<T extends TableRowType> = {
   rows: T[];
-  // testingOnlyTotalRows: any[];
-  sortBy: Exclude<keyof T, symbol> | null;
+  testingOnlyTotalRows: any[];
+  sortBy: Extract<keyof T, string | number> | null;
   sortOrder: "ASC" | "DESC" | null;
-  sort: (sortBy: Exclude<keyof T, symbol>, sortOrder: "ASC" | "DESC") => void;
+  sort: (sortBy: Extract<keyof T, string>, sortOrder: "ASC" | "DESC") => void;
   page: number | null;
   setPage: Dispatch<SetStateAction<number | null>>;
   rowsPerPage: number | null;
@@ -25,11 +25,12 @@ export type ContextType<T extends TableRowType> = {
   draggedElementIndex: number | null;
   setDraggedElementIndex: Dispatch<SetStateAction<number | null>>;
   sizeable: boolean;
+  totalRows: number;
 };
 
 export interface SortableTableProps<T extends TableRowType> {
   data: T[];
-  sortBy?: Exclude<keyof T, symbol> | null;
+  sortBy?: Extract<keyof T, string | number> | null;
   sortOrder?: "ASC" | "DESC" | null;
   baseRowClass: string;
   draggedRowClass: string;
