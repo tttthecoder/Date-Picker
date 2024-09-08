@@ -11,11 +11,11 @@ function App() {
           age: number;
           city: string;
         }>
-          baseRowClass={"bg-white border-b border-gray-300 hover:bg-gray-100"}
+          baseRowClass={"bg-white even:bg-slate-200"}
           sortBy={"name"}
           sortOrder={"DESC"}
           sizeable
-          draggedRowClass={"opacity-10"}
+          draggedRowClass={"opacity-30"}
           data={data}
           rowsPerPage={4}
         />

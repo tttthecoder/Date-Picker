@@ -20,7 +20,7 @@ function TableRow<T extends TableRowType>({
           <td
             key={key}
             draggable={false}
-            className="max-w-[300px] py-2 px-4 text-ellipsis text-nowrap overflow-hidden border-inherit border"
+            className="max-w-[300px] py-2 px-4 text-ellipsis text-nowrap overflow-hidden"
           >
             {data[`${key}`]}
           </td>

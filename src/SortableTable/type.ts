@@ -27,10 +27,6 @@ export type ContextType<T extends TableRowType> = {
     currentID: string | number,
     targetID: string | number
   ) => void;
-  targetPositionIndex: number | null;
-  setTargetPositionIndex: Dispatch<SetStateAction<number | null>>;
-  draggedElementIndex: number | null;
-  setDraggedElementIndex: Dispatch<SetStateAction<number | null>>;
   sizeable: boolean;
   totalNumOfRowsWithNothingApplied: number;
   columnNames: (keyof T)[];

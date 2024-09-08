@@ -1,4 +1,4 @@
-import { DragEvent, useContext } from "react";
+import { DragEvent, useContext, useState } from "react";
 import { TableContext } from "./context";
 import TableRow from "./TableRow";
 import { isInRangeFromDraggedElementToTargetPosition } from "./utils/isInRangeFromDraggedElementToTargetPosition";
@@ -14,12 +14,13 @@ export default function TableBody({
     rowsWithSortPaginationAndFilterApplied,
     testingOnlyTotalRows,
     movingRowToBeAfterAnotherRow,
-    draggedElementIndex,
-    setDraggedElementIndex,
-    targetPositionIndex,
-    setTargetPositionIndex,
   } = useContext(TableContext);
-
+  const [targetPositionIndex, setTargetPositionIndex] = useState<number | null>(
+    null
+  );
+  const [draggedElementIndex, setDraggedElementIndex] = useState<number | null>(
+    null
+  );
   const handleDragEnd = (e: DragEvent, index: number) => {
     // this function will be called at the end of the dragging operation and inside this function, we have the latest variables' values.
     setTargetPositionIndex(null);
