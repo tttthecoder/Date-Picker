@@ -1,5 +1,5 @@
 import { DragEvent, useContext, useState } from "react";
-import { TableContext } from "./context";
+import { TableContext } from "./CommonTableStatesProvider.tsx";
 import TableRow from "./TableRow";
 import { isInRangeFromDraggedElementToTargetPosition } from "./utils/isInRangeFromDraggedElementToTargetPosition";
 
@@ -12,7 +12,7 @@ export default function TableBody({
 }) {
   const {
     rowsWithSortPaginationAndFilterApplied,
-    testingOnlyTotalRows,
+    // testingOnlyTotalRows,
     movingRowToBeAfterAnotherRow,
   } = useContext(TableContext);
   const [targetPositionIndex, setTargetPositionIndex] = useState<number | null>(

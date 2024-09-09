@@ -14,7 +14,6 @@ function App() {
           baseRowClass={"bg-white even:bg-slate-200"}
           sortBy={"name"}
           sortOrder={"DESC"}
-          sizeable
           draggedRowClass={"opacity-30"}
           data={data}
           rowsPerPage={4}

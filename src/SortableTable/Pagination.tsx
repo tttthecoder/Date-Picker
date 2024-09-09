@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { TableContext } from "./context";
+import { TableContext } from "./CommonTableStatesProvider.tsx";
 
 const Pagination: React.FC = () => {
   const { page, rowsPerPage, setPage, totalNumOfRowsWithSortAndFilterApplied } =

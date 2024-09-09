@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 export type Primitive = string | number | boolean | null;
 
@@ -27,7 +27,6 @@ export type ContextType<T extends TableRowType> = {
     currentID: string | number,
     targetID: string | number
   ) => void;
-  sizeable: boolean;
   totalNumOfRowsWithNothingApplied: number;
   columnNames: (keyof T)[];
 };
@@ -38,7 +37,6 @@ export interface SortableTableProps<T extends TableRowType> {
   sortOrder?: "ASC" | "DESC" | null;
   baseRowClass: string;
   draggedRowClass: string;
-  sizeable?: boolean;
   rowsPerPage: number;
 }
 
@@ -47,4 +45,18 @@ export interface TableRowProps<T>
   data: T;
   cursorStylesClass: string;
   animatedStyles: Record<"transform" | "transition", string> | {};
+}
+export interface TableHeaderProps
+  extends React.HTMLAttributes<HTMLTableCellElement> {
+  headerTitle: string | number;
+}
+
+export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {}
+
+export interface CommonTableStateProviderProps<T extends TableRowType> {
+  data: T[];
+  sortBy?: Extract<keyof T, string | number> | null;
+  sortOrder?: "ASC" | "DESC" | null;
+  rowsPerPage: number;
+  children: ReactNode;
 }

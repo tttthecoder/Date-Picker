@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { TableContext } from "./context";
+import { TableContext } from "./CommonTableStatesProvider";
 import { FaLongArrowAltUp } from "react-icons/fa";
 import { capitalizeFirstChar } from "./utils/capitalizeFirstChar";
 
