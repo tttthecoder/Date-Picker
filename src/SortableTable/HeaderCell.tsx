@@ -3,6 +3,7 @@ import { TableHeaderCellProps } from "./type";
 import { FaLongArrowAltUp } from "react-icons/fa";
 import { capitalizeFirstChar } from "./utils/capitalizeFirstChar";
 import { TableContext } from "./CommonTableStatesProvider";
+import { useForcedDocumentCursor } from "../hooks/useForcedDocumentCursor";
 
 export function HeaderCell({
   headerTitle,
@@ -18,6 +19,7 @@ export function HeaderCell({
   const [colWidth, setColWidth] = useState<number | null>(null);
   const [minColWidth, setMinColWidth] = useState<number | null>(null);
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
+  const { setDocumentCursor } = useForcedDocumentCursor();
   const [starterMouseDownPosition, setInitialMouseDownPosition] = useState<
     number | null
   >(null);
@@ -43,7 +45,7 @@ export function HeaderCell({
   // ========================= this effect is for the dynamic handling of the cursor ===================================================
   useEffect(() => {
     if (!isMouseDown) return;
-
+    setDocumentCursor("col-resize");
     const mouseMoveHandler = (e: MouseEvent) => {
       const dx = e.clientX - starterMouseDownPosition!;
       if (colWidth! + dx < minColWidth!) return;
@@ -52,6 +54,7 @@ export function HeaderCell({
     const mouseUpHandler = (event: MouseEvent) => {
       setIsMouseDown(false);
       setInitialMouseDownPosition(null);
+      setDocumentCursor(null);
     };
 
     document.addEventListener("mousemove", mouseMoveHandler, true);
@@ -66,7 +69,6 @@ export function HeaderCell({
   function handleMouseDownOnResizer(
     event: React.MouseEvent<HTMLTableCellElement, MouseEvent>
   ) {
-    console.log("mouse down");
     setIsMouseDown(true);
     setInitialMouseDownPosition(event.clientX);
   }
@@ -99,10 +101,17 @@ export function HeaderCell({
       ) : null}
       <div
         onMouseDown={handleMouseDownOnResizer}
-        className="absolute right-1 top-1/2 -translate-y-1/2 h-[60%] w-[1px] transition-none
-         bg-slate-500 hover:cursor-col-resize hover:bg-slate-700 hover:scale-x-125 active:bg-slate-700 active:scale-x-125
-         "
-      ></div>
+        className="
+        absolute right-1 top-1/2 -translate-y-1/2 
+        h-[60%] w-[8px]
+        hover:cursor-col-resize
+        active:border-l-2 active:border-r-2
+        active:border-slate-700 
+        group
+        "
+      >
+        <div className="ml-auto mr-auto h-full w-[1px] bg-slate-500 group-hover:bg-slate-700 group-active:bg-transparent" />
+      </div>
     </th>
   );
 }
