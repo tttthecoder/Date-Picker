@@ -31,11 +31,13 @@ export type ContextType<T extends TableRowType> = {
   columnNames: (keyof T)[];
 };
 
-export interface SortableTableProps<T extends TableRowType> {
+export interface SortableTableProps<T extends TableRowType>
+  extends React.HTMLAttributes<HTMLTableElement> {
   data: T[];
   sortBy?: Extract<keyof T, string | number> | null;
   sortOrder?: "ASC" | "DESC" | null;
   baseRowClass: string;
+  titlesRowClass: string;
   draggedRowClass: string;
   rowsPerPage: number;
 }
@@ -46,12 +48,18 @@ export interface TableRowProps<T>
   cursorStylesClass: string;
   animatedStyles: Record<"transform" | "transition", string> | {};
 }
-export interface TableHeaderProps
+
+export interface TableHeaderCellProps
   extends React.HTMLAttributes<HTMLTableCellElement> {
   headerTitle: string | number;
 }
 
 export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {}
+
+export interface TableHeaderProps
+  extends React.HTMLAttributes<HTMLTableSectionElement> {
+  titlesRowClass: string;
+}
 
 export interface CommonTableStateProviderProps<T extends TableRowType> {
   data: T[];

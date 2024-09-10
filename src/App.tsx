@@ -11,12 +11,13 @@ function App() {
           age: number;
           city: string;
         }>
-          baseRowClass={"bg-white even:bg-slate-200"}
+          baseRowClass={"bg-white even:bg-slate-100 font-mono"}
+          titlesRowClass={"bg-slate-200 border-slate-300 font-mono"}
           sortBy={"name"}
           sortOrder={"DESC"}
           draggedRowClass={"opacity-30"}
           data={data}
-          rowsPerPage={4}
+          rowsPerPage={7}
         />
       </div>
     </>

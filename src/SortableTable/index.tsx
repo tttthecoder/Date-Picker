@@ -11,6 +11,7 @@ function SortableTable<T extends TableRowType>({
   sortOrder = null,
   rowsPerPage = 5,
   baseRowClass = "",
+  titlesRowClass = "",
   draggedRowClass = "",
   ...rest
 }: SortableTableProps<T>) {
@@ -22,7 +23,7 @@ function SortableTable<T extends TableRowType>({
       rowsPerPage={rowsPerPage}
     >
       <Table {...rest}>
-        <Header />
+        <Header titlesRowClass={titlesRowClass} />
         <TableBody
           baseRowClass={baseRowClass}
           draggedRowClass={draggedRowClass}

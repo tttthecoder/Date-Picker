@@ -13,7 +13,11 @@ function TableRow<T extends TableRowType>({
       draggable
       {...rest}
       style={{ ...animatedStyles }}
-      className={twMerge(className, cursorStylesClass)}
+      className={twMerge(
+        className,
+        cursorStylesClass,
+        "last:*:last:rounded-br-lg first:*:last:rounded-bl-lg"
+      )}
     >
       {Object.keys(data).map((key) => {
         return (

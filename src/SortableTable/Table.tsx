@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { TableProps } from "./type";
 
-export function Table({ children, ...rest }: TableProps) {
+export function Table({ children, className, ...rest }: TableProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  console.log("table ");
   return (
-    <div className="w-full">
+    <div className={`w-fit max-w-[600px] overflow-x-auto overflow-y-hidden`}>
       <table
         className={`${
           mounted ? "table-fixed" : "table-auto"
-        }  bg-white border border-gray-300 shadow-md  border-collapse`}
+        }  w-fit bg-white shadow-md  border-collapse`}
       >
         {children}
       </table>
