@@ -1,7 +1,7 @@
 import { DragEvent, useContext, useState } from "react";
 import { TableContext } from "./CommonTableStatesProvider.tsx";
 import TableRow from "./TableRow";
-import { isInRangeFromDraggedElementToTargetPosition } from "./utils/isInRangeFromDraggedElementToTargetPosition";
+import { isInRangeFromDraggedElementToTargetPosition } from "./utils/helpers/isInRangeFromDraggedElementToTargetPosition.ts";
 
 export default function TableBody({
   baseRowClass,

@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { dayNames } from "../utils/constant";
+import { dayNames } from "./utils/contants";
 import {
   computeRangeOfDates,
   getDate,
@@ -17,7 +17,7 @@ import {
   getNextMonth,
   getNextYear,
   getYear,
-} from "../utils/helper";
+} from "./utils/helpers/helper";
 import Button from "./Button";
 import { IoCaretBack, IoCaretForward } from "react-icons/io5";
 import { FaBackward, FaForward } from "react-icons/fa";

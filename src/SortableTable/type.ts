@@ -32,7 +32,7 @@ export type ContextType<T extends TableRowType> = {
 };
 
 export interface SortableTableProps<T extends TableRowType>
-  extends React.HTMLAttributes<HTMLTableElement> {
+  extends Omit<React.HTMLAttributes<HTMLTableElement>, "className"> {
   data: T[];
   sortBy?: Extract<keyof T, string | number> | null;
   sortOrder?: "ASC" | "DESC" | null;

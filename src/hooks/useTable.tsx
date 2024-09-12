@@ -1,18 +1,21 @@
 import { useMemo, useState } from "react";
-import { sortWithOutMutation } from "../SortableTable/utils/sortWithOutMutation";
+import { sortWithOutMutation } from "../common/utils/helpers/sortWithOutMutation";
 
-function useTable<T extends Record<string, any> & { id: string | number }>(
+export type Primitive = string | number | boolean | null;
+
+function useTable<
+  T extends Record<string, Primitive> & { id: string | number }
+>(
   data: T[],
   sortBy: Extract<keyof T, string | number> | null = null,
   sortOrder: "ASC" | "DESC" | null = null,
   filterBy: Extract<keyof T, string | number> | null = null,
-  filterValue: string | number | null = null,
+  filterValue: Primitive = null,
   page: number | null = null,
   rowsPerPage: number | null = null
 ) {
   // ================ this function will compute the initial sorted data only once for the initial value of the useState hook(of the _rows) ========================
   const _initialSortedRowsFor1stRender = useMemo(() => {
-    // console.log("inside memo");
     if (sortBy === null || sortOrder === null) return data;
     return sortWithOutMutation(data, sortBy, sortOrder);
   }, []);
@@ -29,9 +32,7 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
     keyof T,
     string | number
   > | null>(filterBy);
-  const [_filterByValue, _setFilterByValue] = useState<
-    string | number | null | boolean
-  >(filterValue);
+  const [_filterByValue, _setFilterByValue] = useState<Primitive>(filterValue);
   const [_page, _setPage] = useState<number | null>(page);
   const [_rowsPerPage, _setRowsPerPage] = useState<number | null>(rowsPerPage);
 
@@ -83,10 +84,11 @@ function useTable<T extends Record<string, any> & { id: string | number }>(
     if (_filterBy !== null && _filterByValue !== null) {
       accumulatingRows = accumulatingRows.filter(
         // to be improved later
-        (row) =>
-          row[`${_filterBy}`]
+        (row) => {
+          return `${row[`${_filterBy}`]}`
             .toLowerCase()
-            .includes(`${_filterByValue}`.toLowerCase())
+            .includes(`${_filterByValue}`.toLowerCase());
+        }
       );
     }
     const totalNumOfRowsWithSortAndFilterApplied = accumulatingRows.length;

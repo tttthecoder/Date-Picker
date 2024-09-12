@@ -4,6 +4,7 @@ import TableBody from "./TableBody";
 import Pagination from "./Pagination";
 import Header from "./header.tsx";
 import { Table } from "./Table";
+import Filter from "./Filter.tsx";
 
 function SortableTable<T extends TableRowType>({
   data,
@@ -22,14 +23,17 @@ function SortableTable<T extends TableRowType>({
       sortOrder={sortOrder}
       rowsPerPage={rowsPerPage}
     >
-      <Table {...rest}>
-        <Header titlesRowClass={titlesRowClass} />
-        <TableBody
-          baseRowClass={baseRowClass}
-          draggedRowClass={draggedRowClass}
-        />
-      </Table>
-      <Pagination />
+      <div className={`w-fit max-w-[100%] overflow-x-auto overflow-y-hidden `}>
+        <Filter />
+        <Table {...rest}>
+          <Header titlesRowClass={titlesRowClass} />
+          <TableBody
+            baseRowClass={baseRowClass}
+            draggedRowClass={draggedRowClass}
+          />
+        </Table>
+        <Pagination />
+      </div>
     </CommonTableStatesProvider>
   );
 }

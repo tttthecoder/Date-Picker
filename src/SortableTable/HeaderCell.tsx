@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { TableHeaderCellProps } from "./type";
 import { FaLongArrowAltUp } from "react-icons/fa";
-import { capitalizeFirstChar } from "./utils/capitalizeFirstChar";
+import { capitalizeFirstChar } from "../common/utils/helpers/capitalizeFirstChar";
 import { TableContext } from "./CommonTableStatesProvider";
 import { useForcedDocumentCursor } from "../hooks/useForcedDocumentCursor";
 
@@ -79,7 +79,7 @@ export function HeaderCell({
       key={headerTitle}
       ref={headerCellRef}
       draggable={false}
-      className="select-none relative py-1 text-left cursor-pointer last:rounded-tr-md first:rounded-tl-md"
+      className="select-none relative py-1 text-left cursor-pointer"
       onClick={() => {
         sortOrder === "ASC"
           ? sort(headerTitle.toString(), "DESC")

@@ -1,4 +1,4 @@
-import { dateInMiliseconds, monthNames } from "./constant";
+import { dateInMiliseconds, monthNames } from "../contants";
 
 export function getMonthName(date: string) {
   return monthNames[new Date(date).getMonth()];

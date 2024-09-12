@@ -1,7 +1,10 @@
 import React, { useContext, useState } from "react";
-import { TableContext } from "./context.tsx";
 import useDebouncedCallback from "../hooks/useDebounce";
 import { Primitive } from "./type";
+import { TableContext } from "./CommonTableStatesProvider";
+import { capitalizeFirstChar } from "../common/utils/helpers/capitalizeFirstChar";
+import Select from "../ControlledSelect";
+import { IoSearch } from "react-icons/io5";
 
 const Filter: React.FC = () => {
   const {
@@ -12,16 +15,15 @@ const Filter: React.FC = () => {
     columnNames,
   } = useContext(TableContext);
 
-  const [localFilterValue, setLocalFilterValue] =
+  const [localFilterByValue, setLocalFilterValue] =
     useState<Primitive>(filterByValue);
   useDebouncedCallback(
-    (localFilterValue: Primitive) => {
-      setFilterByValue(localFilterValue);
+    (localFilterByValue: Primitive) => {
+      setFilterByValue(localFilterByValue);
     },
-    [localFilterValue],
+    [localFilterByValue],
     200
   );
-  console.log("filter", filterBy, filterByValue, localFilterValue);
 
   // Handle changes in the filter input
   const handleFilterValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,44 +36,40 @@ const Filter: React.FC = () => {
   };
 
   return (
-    <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md">
-      <div className="mb-4">
-        <label
-          htmlFor="filter-by"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Filter by:
-        </label>
-        <select
-          id="filter-by"
-          value={filterBy ? filterBy : undefined}
-          onChange={handleFilterByChange}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        >
-          {columnNames.map((column) => {
-            return (
-              <option key={column} value={column}>
-                {column.toString().toUpperCase()}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-      <div>
+    <div className="flex items-center justify-start w-full overflow-auto border border-slate-300 border-b-0 rounded-tl-lg rounded-tr-lg shadow-md font-mono">
+      <Select
+        getLabel={(value) =>
+          value !== null ? capitalizeFirstChar(value.toString()) : "none"
+        }
+        name="filterBy"
+        selectedOption={filterBy}
+        options={columnNames}
+        className="text-center px-2 py-2 appearance-none border-r border-slate-300 outline-none shadow-sm sm:text-sm "
+        onChange={(nextOption) => setFilterBy(nextOption)}
+      ></Select>
+      <div className="flex items-center justify-center flex-grow  pr-2 border-none">
         <label
           htmlFor="filter-value"
-          className="block text-sm font-medium text-gray-700"
+          hidden
+          className="block text-sm font-medium text-gray-700 sr-only"
         >
           Filter value:
         </label>
         <input
           id="filter-value"
           type="text"
-          value={localFilterValue !== null ? localFilterValue.toString() : ""}
+          value={
+            localFilterByValue !== null ? localFilterByValue.toString() : ""
+          }
           onChange={handleFilterValueChange}
-          placeholder={filterBy ? `Enter ${filterBy}` : "..."}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          placeholder={
+            filterBy
+              ? `Search by ${filterBy} ...`
+              : "Choose a field to search by..."
+          }
+          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm border-none focus:outline-none sm:text-sm"
         />
+        <IoSearch className="text-slate-500" />
       </div>
     </div>
   );
